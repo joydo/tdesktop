@@ -27,6 +27,19 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Disable man for further package installs.
+        run: |
+          cfgFile="/etc/dpkg/dpkg.cfg.d/no_man"
+          sudo touch $cfgFile
+          sudo chmod 777 $cfgFile
+          p() {
+            sudo echo "path-exclude=/usr/share/$1/*" >> $cfgFile
+          }
+
+          p man
+          p locale
+          p doc
+
       - name: First set up.
         run: |
           sudo apt-get update
